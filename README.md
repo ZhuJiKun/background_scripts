@@ -1,12 +1,15 @@
 # background_scripts
 
-用于自定义本地应用背景图的脚本集合。目前包含 Kimi Code Web 背景设置脚本。
+用于自定义本地应用背景图的脚本集合。目前包含 Kimi Code Web 和 ChatGPT macOS 桌面应用背景设置脚本。
 
 ## 目录结构
 
 ```text
 background_scripts/
 ├── README.md
+├── chatgpt/
+│   ├── README.md
+│   └── chatgpt-background.sh
 └── kimi/
     └── kimi-bg.sh
 ```
@@ -69,8 +72,22 @@ Kimi Code 升级可能覆盖缓存中的修改，届时重新运行脚本即可�
 - 脚本仅操作本机文件，不包含上传图片、收集数据或访问外部服务的逻辑。
 - 脚本不包含 API 密钥、访问令牌、密码或硬编码的个人用户名。
 
+## ChatGPT macOS 背景设置
+
+`chatgpt/chatgpt-background.sh` 可以为官方 ChatGPT macOS 桌面应用设置本地背景图和透明度，无需安装 Dream Skin 或其他换肤软件。
+
+```bash
+./chatgpt/chatgpt-background.sh "$HOME/Pictures/background.jpg" 35
+```
+
+脚本通过仅绑定本机回环地址的 CDP 注入临时样式，不修改 `ChatGPT.app`、聊天数据或 Codex 配置。已开启调试端口时支持热更新；需要重启时会先请求确认。
+
+完整的使用前提、参数说明、实现原理、恢复方法和注意事项见 [chatgpt/README.md](chatgpt/README.md)。
+
 ## 文件说明
 
 | 文件 | 用途 |
 | --- | --- |
+| `chatgpt/chatgpt-background.sh` | 设置 ChatGPT macOS 桌面应用的本地背景图和透明度 |
+| `chatgpt/README.md` | ChatGPT 背景脚本的完整使用文档 |
 | `kimi/kimi-bg.sh` | 设置本地 Kimi Code Web 的背景图和蒙层深度 |
