@@ -68,12 +68,17 @@ python3 - "$D/index.html" "$A" "$EXT" <<'PYEOF'
 import re, sys
 path, a, ext = sys.argv[1], sys.argv[2], sys.argv[3]
 
+tooltip = (
+    '      /* custom tooltip colors */\n'
+    '      html[data-color-scheme=dark] .ui-tip__bubble,html[data-color-scheme=system] .ui-tip__bubble{background:rgba(31,31,31,.96);color:#f5f5f5}\n'
+)
 block = (
     '    <style>\n'
     '      /* custom background image */\n'
     f'      body::before{{content:"";position:fixed;inset:0;z-index:-1;background:linear-gradient(rgba(0,0,0,{a}),rgba(0,0,0,{a})),url("/bg.{ext}") center/cover no-repeat}}\n'
     '      html[data-color-scheme=dark],html[data-color-scheme=system]{--bg:transparent;--panel:rgba(31,31,31,.7);--panel2:rgba(18,18,18,.7);--canvas:transparent;--bluebg:rgba(41,41,41,.72);--color-bg:transparent;--color-surface:rgba(31,31,31,.7);--color-surface-raised:rgba(41,41,41,.78);--color-surface-sunken:rgba(18,18,18,.55);--color-well:rgba(31,31,31,.7);--color-surface-deep:rgba(13,13,13,.7);--color-sidebar-bg:rgba(13,13,13,.65);--color-user-bubble-bg:rgba(41,41,41,.88)}\n'
-    '    </style>\n'
+    + tooltip
+    + '    </style>\n'
     '  </head>'
 )
 
@@ -83,6 +88,8 @@ if "custom background" in s:
     s = re.sub(r'rgba\(0,0,0,\.\d+\),rgba\(0,0,0,\.\d+\)',
                f'rgba(0,0,0,{a}),rgba(0,0,0,{a})', s, count=1)
     s = re.sub(r'/bg\.\w+', f'/bg.{ext}', s)
+    if "custom tooltip colors" not in s:
+        s = s.replace("    </style>", tooltip + "    </style>", 1)
 else:
     # 补丁被冲掉了：重新插入
     s = s.replace("  </head>", block, 1)
